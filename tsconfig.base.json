@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@layux/actions-core": ["packages/actions-core/src/index.ts"],
+      "@layux/injector": ["packages/injector/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
