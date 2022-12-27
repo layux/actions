@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@layux/action-ftp": ["packages/action-ftp/src/index.ts"],
       "@layux/actions-core": ["packages/actions-core/src/index.ts"],
       "@layux/injector": ["packages/injector/src/index.ts"]
     }
