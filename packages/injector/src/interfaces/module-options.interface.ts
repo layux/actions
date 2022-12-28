@@ -1,4 +1,4 @@
-import { ModuleProvider } from '../types/dependency-injection.types';
+import { ModuleProvider, ProviderToken } from '../types/dependency-injection.types';
 import { Constructable } from '../types/reflection.types';
 
 export interface IModuleOptions {
@@ -18,5 +18,5 @@ export interface IModuleOptions {
    * A list of components that should be available in other modules that import this module.
    *
    */
-  exports?: Array<Constructable<unknown> | Symbol | string>;
+  exports?: Array<ModuleProvider | ProviderToken>;
 }

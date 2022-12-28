@@ -1,19 +1,44 @@
+import 'reflect-metadata';
 import * as core from '@actions/core';
+import * as yaml from 'yaml';
+import { SEPARATOR_METADATA_KEY } from '../constants/metadata.constants';
 
 export const Input =
   (name: string, required = false): PropertyDecorator =>
   (target, propertyKey) => {
     // Read the property type and cast the value to that type
     const type = Reflect.getMetadata('design:type', target, propertyKey);
+    const value = core.getInput(name, { required });
 
-    // For arrays check if there's a @Separator decorator and use that metadata to split the string, otherwise try to use yaml.parse
-    if (type === Array) {
-      const separator = Reflect.getMetadata('separator', target, propertyKey);
+    if (!value) return;
 
-      if (separator) {
-        Reflect.set(target, propertyKey, core.getInput(name).split(separator));
-      } else {
-        Reflect.set(target, propertyKey, core.getMultilineInput(name, { required }));
+    switch (type) {
+      case Array: {
+        const separator = Reflect.getMetadata(SEPARATOR_METADATA_KEY, target, propertyKey);
+
+        if (separator) {
+          Reflect.set(target, propertyKey, value.split(separator));
+        } else {
+          Reflect.set(target, propertyKey, yaml.parse(value));
+        }
+
+        break;
       }
+
+      case Object:
+        Reflect.set(target, propertyKey, yaml.parse(value));
+        break;
+
+      case Boolean:
+        Reflect.set(target, propertyKey, value.toLowerCase() === 'true');
+        break;
+
+      case Number:
+        Reflect.set(target, propertyKey, Number(value));
+        break;
+
+      default:
+        Reflect.set(target, propertyKey, value);
+        break;
     }
   };

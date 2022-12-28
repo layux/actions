@@ -1,0 +1,44 @@
+name: 'Interpolate environment variables'
+description: 'A github action to interpolate environment variables in files with customizable options'
+author: 'MisterQuestions'
+
+branding:
+  color: 'orange'
+  icon: 'terminal'
+
+inputs:
+  env_file:
+    required: false
+    description: 'Path to the .env file to use for interpolation'
+    default: ''
+  env_file_as_fallback:
+    required: false
+    description: 'Whether to use the .env file as a fallback for missing environment variables'
+    default: ''
+  env_variable_prefix:
+    required: false
+    description: 'Prefix for environment variables to interpolate, variables that do not start with this prefix will be ignored'
+    default: ''
+  env_variable_suffix:
+    required: false
+    description: 'Suffix for environment variables to interpolate, variables that do not end with this suffix will be ignored'
+    default: ''
+  replace_file_extensions:
+    required: false
+    description: 'Array of file extensions to replace'
+    default: |
+      - yml
+      - yaml
+      - json
+      - xml
+      - properties
+      - conf
+      - txt
+  replace_file_exclude_paths:
+    required: false
+    description: 'Array of paths to exclude from replacement'
+    default: ''
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

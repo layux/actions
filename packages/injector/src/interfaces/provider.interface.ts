@@ -5,7 +5,7 @@ export interface IProvider {
    * The token that identifies the provider.
    *
    */
-  name: Symbol | string;
+  name?: symbol | string;
 
   /**
    * The scope of the provider.

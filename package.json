@@ -5,8 +5,10 @@
   "scripts": {},
   "dependencies": {
     "@actions/core": "^1.10.0",
+    "object-hash": "^3.0.0",
     "reflect-metadata": "^0.1.13",
     "tslib": "^2.3.0",
+    "winston": "^3.8.2",
     "yaml": "^2.2.0"
   },
   "devDependencies": {

@@ -9,4 +9,4 @@ export type ModuleProvider =
   | IClassProvider
   | IFactoryProvider;
 
-export type ProviderToken = Constructable<unknown> | Symbol | string;
+export type ProviderToken = Constructable<unknown> | symbol | string;
