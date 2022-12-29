@@ -7,8 +7,9 @@ import { PROVIDER_INJECT_METADATA_KEY } from '../constants/provider.constants';
  * @returns A decorator function to inject metadata about the parameter.
  */
 export const Inject =
-  (token: string): ParameterDecorator =>
+  (token: string | symbol): ParameterDecorator =>
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (target, _propertyKey, _parameterIndex) => {
-    Reflect.defineMetadata(PROVIDER_INJECT_METADATA_KEY, token, target);
+    Reflect.defineMetadata(PROVIDER_INJECT_METADATA_KEY, String(token), target);
+    console.debug({ token, target, _propertyKey, _parameterIndex });
   };

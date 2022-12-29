@@ -96,10 +96,10 @@ export class ModuleService {
 
       if (!provider) break;
 
-      const name = this.providerService.getProviderNameFromOptions(provider);
+      const name = this.providerService.getProviderName(provider);
       const exported = options.exports?.some(
         (exportedProvider) =>
-          this.providerService.getProviderNameFromToken(exportedProvider) === name
+          this.providerService.getProviderName(exportedProvider) === name
       );
 
       await this.providerService.create(name, provider, container, exported);
@@ -128,11 +128,11 @@ export class ModuleService {
     if (directProvider) return directProvider;
 
     // If we want to check if the provider is uncreated, check if it's in the unresolved providers
-    const token = this.providerService.getProviderNameFromToken(provider);
+    const token = this.providerService.getProviderName(provider);
     const unresolvedProvider =
       unresolved &&
       container.unresolvedProviders.find(
-        (p) => this.providerService.getProviderNameFromOptions(p) === token
+        (p) => this.providerService.getProviderName(p) === token
       );
 
     if (unresolvedProvider) return unresolvedProvider;

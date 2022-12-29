@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import * as hash from 'object-hash';
 import { ModuleProvider, ProviderToken } from '../types/dependency-injection.types';
 import { ModuleContainer } from '../models/module-container.model';
 import { ModuleService } from './module.service';
@@ -48,23 +49,17 @@ export class ProviderService {
   }
 
   /**
-   * Get the provider name from the provider options
+   * Generic to get the name of a provider from a ModuleProvider or a ProviderToken, when the 'name' property is not available
+   * hash the provider to get a unique name
    *
-   * @param provider The provider options to get the name from
+   * @param provider The provider to get the name from
    * @returns string The provider name
    */
-  getProviderNameFromOptions(provider: ModuleProvider): string {
-    return typeof provider === 'function' ? provider.name : String(provider.name);
-  }
+  getProviderName(provider: ModuleProvider | ProviderToken): string {
+    if (typeof provider === 'function') return provider.name;
+    if (typeof provider === 'object' && 'name' in provider) return String(provider.name);
 
-  /**
-   * Get the provider name from the provider token
-   *
-   * @param provider The provider token to get the name from
-   * @returns string The provider name
-   */
-  getProviderNameFromToken(provider: ProviderToken): string {
-    return typeof provider === 'function' ? provider.name : String(provider);
+    return hash(provider as never);
   }
 
   async create(
@@ -117,7 +112,7 @@ export class ProviderService {
     container: ModuleContainer,
     provider: IFactoryProvider
   ): Promise<unknown> {
-    const parameters = Reflect.getMetadata('design:paramtypes', provider.useFactory);
+    const parameters = Reflect.getMetadata('design:paramtypes', provider.useFactory) || [];
     const dependencies = await Promise.all(
       parameters.map(async (p: unknown) => this.resolveDependency(p, container))
     );
@@ -151,10 +146,8 @@ export class ProviderService {
    */
   private async resolveDependency(param: any, container: ModuleContainer): Promise<unknown> {
     // Try to resolve from the container of already created providers
-    const targetDependency =
-      typeof param === 'function'
-        ? param
-        : Reflect.getMetadata(PROVIDER_INJECT_METADATA_KEY, param);
+    const targetDependency = Reflect.getMetadata(PROVIDER_INJECT_METADATA_KEY, param) || param;
+    console.debug(`Resolving dependency ${targetDependency}...`);
     const containerDependency = container.get(targetDependency);
 
     if (containerDependency) return containerDependency;

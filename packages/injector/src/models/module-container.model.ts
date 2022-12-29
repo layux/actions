@@ -45,23 +45,24 @@ export class ModuleContainer {
    * @param shouldThrow True if an error should be thrown if the provider is not found, false otherwise
    * @returns T The provider instance
    */
-  get<T>(provider: ProviderToken, shouldThrow = true): T {
+  get<T>(provider: ProviderToken): T {
     // Search in current module first
     const tokenName = typeof provider === 'function' ? provider.name : String(provider);
     const moduleProvider = this._providers.get(tokenName);
+
+    console.debug(`Getting provider ${tokenName} from module ${this._name}`);
+    console.debug(`Available providers: ${Array.from(this._providers.keys()).join(', ')}`);
 
     if (moduleProvider) return moduleProvider.value as T;
 
     // Search in imported modules
     for (const container of this._imports) {
-      const importedProvider = container.get<T>(tokenName, false);
+      const importedProvider = container.get<T>(tokenName);
 
       if (importedProvider) return importedProvider;
     }
 
-    if (shouldThrow) throw new Error(`Provider ${tokenName} not found in module ${this._name}`);
-
-    return undefined as T;
+    throw new Error(`Provider ${tokenName} not found in module ${this._name}`);
   }
 
   /**
