@@ -8,7 +8,9 @@ describe('ProvidedContainerModule', () => {
   let container: ModuleContainer;
 
   beforeAll(async () => {
+    console.debug('Creating container for ProvidedContainerModule');
     container = await ModuleFactory.create(ProvidedContainerModule);
+    console.debug('Container created');
   });
 
   it('should create container for CombinedModule', async () => {

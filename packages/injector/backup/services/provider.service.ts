@@ -146,8 +146,9 @@ export class ProviderService {
    */
   private async resolveDependency(param: any, container: ModuleContainer): Promise<unknown> {
     // Try to resolve from the container of already created providers
-    const targetDependency = Reflect.getMetadata(PROVIDER_INJECT_METADATA_KEY, param) || param;
-    console.debug(`Resolving dependency ${targetDependency}...`);
+    const targetDependency = Reflect.getMetadata(PROVIDER_INJECT_METADATA_KEY, param);
+
+    console.debug(`Resolving dependency '${targetDependency}' from container`);
     const containerDependency = container.get(targetDependency);
 
     if (containerDependency) return containerDependency;

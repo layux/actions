@@ -1,3 +1,0 @@
-- Avoid hacks for not found provider
-- Ensure options arrays have truthy values (avoid nulls and undefineds)
-- Better error messages for missing providers
